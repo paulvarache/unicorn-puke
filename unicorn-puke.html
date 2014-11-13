@@ -1,0 +1,82 @@
+<polymer-element name="unicorn-puke" 
+				attributes="saturation light speed ltr" 
+				on-mouseover="{{ onMouseEnter }}" 
+				on-mouseout="{{ onMouseLeave }}">
+	<template>
+		<content id="content"></content>
+		<div id="spans"></div>
+	</template>
+	<script>
+	Polymer('unicorn-puke', {
+		saturation: 100,
+		light: 50,
+		speed: 10,
+		ltr: false,
+		spans: [],
+		hues: [],
+		domReady: function () {
+			this.saturation = this.limitToHundred(this.saturation);
+			this.light = this.limitToHundred(this.light);
+			
+			// Explodes the text in a series of spans 
+			this.wrapChars();
+			this.textContent = "";
+		},
+		saturationChanged: function (oldVal, newVal) {
+			this.saturation = this.limitToHundred(this.saturation);
+		},
+		lightChanged: function (oldVal, newVal) {
+			this.light = this.limitToHundred(this.light);
+		},
+		limitToHundred: function (value) {
+			return Math.abs(value)>100? 100: Math.abs(value);
+		},
+		onMouseEnter: function () {
+			this.cycleColors();
+		},
+		onMouseLeave: function () {
+			this.stopCycle();
+		},
+		wrapChars: function () {
+			var txt = this.textContent,
+				len = txt.length,
+				step = 360/len,
+				span = null;
+	
+			for(var i=0; i<len; i++){
+				mC = Math.ceil(i*step);
+				h = mC <= 360 ? mC : 360;
+				span = document.createElement('span');
+				span.textContent = txt.charAt(i);
+				this.$.spans.appendChild(span);
+				this.spans.push(span);
+				this.hues.push(h);
+			}
+		},
+		shiftHuesArray: function() {			
+			if (!this.ltr) {
+				this.hues.push(this.hues.shift());
+			} else {
+				this.hues.unshift(this.hues.pop());
+			}
+		},
+		cycleColors: function() {
+			this.itv = setInterval((function(){
+				this.shiftHuesArray();
+				var that = this;
+				this.spans.forEach(function(span, i){
+					span.style.color = "hsla("+ that.hues[i] +","+ that.saturation +"% ,"+ that.light +"%, 1)";
+				});
+			}).bind(this), this.speed);
+		},
+		stopCycle: function(){
+			// stop color cycling
+			clearInterval(this.itv);
+			// return affected chars to default styling
+			this.spans.forEach(function(span) {
+				span.style.color = "";
+			});
+		}
+	});
+	</script>
+</polymer-element>	

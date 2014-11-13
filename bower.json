@@ -1,0 +1,20 @@
+{
+  "name": "Unicorn-js",
+  "version": "0.0.0",
+  "homepage": "https://github.com/paulirish/Unicorn-js",
+  "authors": [
+    "Paul Varache <perso@paulvarache.ninja>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#~0.5.1",
+    "platform": "Polymer/platform#~0.4.2"
+  }
+}
