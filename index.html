@@ -2,45 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-	<title>Unicorn.js demo</title>
+	<title>Unicorn.js</title>
     <meta name="description" content="">
-    <script src="bower_components/platform/platform.js"></script>
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
     <link rel="import" href="bower_components/polymer/polymer.html">
-    <link rel="import" href="bower_components/font-roboto/roboto.html">
-    <link rel="import" href="unicorn-puke.html">
-    <style type="text/css">
-    html, body{
-    	width: 100%;
-    	height: 100%;
-	    margin: 0;
-	    background-color: #E5E5E5;
-	    font-family: 'RobotoDraft', sans-serif;
-	    font-weight: 300;
-    }
-    .header {
-    	background: url("http://licm.paulvarache.ninja/images/bg.jpg");
-    	background-size: cover;
-    	height: 150px;
-    	filter: blur(2px);
-    	-moz-filter: blur(2px);
-    	-webkit-filter: blur(2px);
-    }
-    .layout {
-    	position: absolute;
-    	bottom: 0;
-    	top:150px;
-    	left: 0;
-    	right: 0;
-    }
-    </style>
+    <link rel="import" href="bower_components/iron-component-page/iron-component-page.html">
 </head>
-<body>
-	<div class="header"></div>
-	<div center-justified layout vertical class="layout">
-		<h1 self-center>
-			<!--This is where the magic happens-->
-			<unicorn-puke id="puke">UNICORN POWER !!!!!</unicorn-puke>
-		</h1>
-	</div>
+<body unresolved>
+	<iron-component-page src="unicorn-puke.html"></iron-component-page>
 </body>
 </html>

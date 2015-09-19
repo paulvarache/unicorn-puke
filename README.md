@@ -1,13 +1,15 @@
 ##This polymer element is just an adaptation of this jQuery plugin: [Unicorn.js](https://github.com/paulirish/Unicorn-js)
 
-##[Demo](http://demo.paulvarache.ninja/unicorn-puke)
+##[Documentation/Demo](http://demo.paulvarache.ninja/unicorn-puke/)
 
 Thanks to the all mighty web components, lighten up your websites and webapps with unicorn-puke !  
 A simple
 ```html
-<unicorn-puke>My awesome text</unicorn-puke>
+<unicorn-puke message="My awesome text"></unicorn-puke>
 ```
-will change your life.  
+will change your life.
+
+
 You can personalize your puke with some attributes:
 <ol>
     <li>Saturation

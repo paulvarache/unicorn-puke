@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+        <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+        <script src="../bower_components/web-component-tester/browser.js"></script>
+
+        <link rel="import" href="../bower_components/polymer/polymer.html">
+        <link rel="import" href="../unicorn-puke.html">
+    </head>
+    <body>
+
+        <unicorn-puke message="Testing is gud"></unicorn-puke>
+
+        <script>
+        var uni = document.querySelector('unicorn-puke');
+        suite('<unicorn-puke>', function() {
+            test('Makes everything shinny', function() {
+                var msg = uni.message;
+                var spanLetters = uni.querySelector('#cont').childNodes;
+                assert.equal(msg.length, spanLetters.length, 'the generated spans do not match the message length');
+                uni.message = "O hai, another test";
+                msg = uni.message;
+                spanLetters = uni.querySelector('#cont').childNodes;
+                assert.equal(msg.length, spanLetters.length, 'the generated spans do not match the message length');
+            });
+        });
+        </script>
+
+    </body>
+</html>
