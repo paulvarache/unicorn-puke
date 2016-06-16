@@ -1,0 +1,32 @@
+{
+  "name": "unicorn-puke",
+  "homepage": "https://github.com/paulvarache/unicorn-puke",
+  "authors": [
+    "Paul Varache <perso@paulvarache.ninja>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "~1.5.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#~1.0.5",
+    "web-component-tester": "Polymer/web-component-tester#~3.3.21"
+  },
+  "_release": "3cb2c26aeb",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "3cb2c26aeb1452eb4b2f7ab4a851d034d2d12c52"
+  },
+  "_source": "git://github.com/paulvarache/unicorn-puke.git",
+  "_target": "master",
+  "_originalSource": "paulvarache/unicorn-puke",
+  "_direct": true
+}

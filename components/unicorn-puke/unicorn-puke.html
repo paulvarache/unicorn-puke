@@ -1,0 +1,144 @@
+<link rel="import" href="../polymer/polymer.html">
+<!--
+An element that add some kick-ass colors to your text
+
+Example:
+
+	```html
+	<unicorn-puke message="My awesome text"></unicorn-puke>
+	```
+
+### Styling
+
+The following custom properties and mixins are available for styling:
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--unicorn-puke-text` | Mixin applied to the text | `{}`
+
+@group 			Kick-ass elements
+@element 		unicorn-puke
+@demo 			demo/unicorn-puke.html
+-->
+<dom-module id="unicorn-puke">
+	<style>
+        :host {
+            display: block;
+        }
+		#cont {
+			@apply(--unicorn-puke-text);
+		}
+	</style>
+	<template>
+		<div id="cont"></div>
+	</template>
+	<script>
+	Polymer({
+		is: 'unicorn-puke',
+		properties: {
+			/**
+			 * The message you want to display
+			 */
+			message: {
+				type: String,
+				observer: '_messageChanged'
+			},
+			/**
+			 * `saturation` changes the colors saturation
+			 */
+			saturation: {
+				type: Number,
+				value: 100,
+				observer: '_saturationChanged'
+			},
+			light: {
+				type: Number,
+				value: 50,
+				observer: '_lightChanged'
+			},
+			/**
+			 * `speed` changes the unicorn power speed
+			 */
+			speed: {
+				type: Number,
+				value: 10
+			},
+			/**
+			 * `ltr` (meaning left to right) allows you to choose the direction
+			 * of the unicorn puke
+			 * @type {Object}
+			 */
+			ltr: {
+				type: Number,
+				value: false
+			}
+		},
+		listeners: {
+			'mouseover': 'puke',
+			'mouseout': 'stopPuking'
+		},
+		_spans: [],
+		_hues: [],
+		_messageChanged: function () {
+			this._wrapChars();
+		},
+		_saturationChanged: function (oldVal, newVal) {
+			this.saturation = this._limitToHundred(this.saturation);
+		},
+		_lightChanged: function (oldVal, newVal) {
+			this.light = this._limitToHundred(this.light);
+		},
+		_limitToHundred: function (value) {
+			return Math.abs(value)>100? 100: Math.abs(value);
+		},
+		_wrapChars: function () {
+			var txt = this.message,
+				len = txt.length,
+				step = 360/len,
+				span = null;
+
+			Polymer.dom(this.$.cont).innerHTML = "";
+
+			for(var i = 0; i < len; i++){
+				mC = Math.ceil(i*step);
+				h = mC <= 360 ? mC : 360;
+				span = document.createElement('span');
+				span.textContent = txt.charAt(i);
+				Polymer.dom(this.$.cont).appendChild(span);
+				this._spans.push(span);
+				this._hues.push(h);
+			}
+			Polymer.dom.flush();
+		},
+		_shiftHuesArray: function() {
+			if (!this.ltr) {
+				this._hues.push(this._hues.shift());
+			} else {
+				this._hues.unshift(this._hues.pop());
+			}
+		},
+		/**
+		 * Makes your text all shinny grblbblblblblb
+		 */
+		puke: function() {
+			this.itv = setInterval(function(){
+				this._shiftHuesArray();
+				this._spans.forEach(function(span, i){
+					span.style.color = "hsla("+ this._hues[i] +","+ this.saturation +"% ,"+ this.light +"%, 1)";
+				}.bind(this));
+			}.bind(this), this.speed);
+		},
+		/**
+		 * Stop the puking
+		 */
+		stopPuking: function(){
+			// stop color cycling
+			clearInterval(this.itv);
+			// return affected chars to default styling
+			this._spans.forEach(function(span) {
+				span.style.color = "";
+			});
+		}
+	});
+	</script>
+</dom-module>
