@@ -1,6 +1,6 @@
 ##This polymer element is just an adaptation of this jQuery plugin: [Unicorn.js](https://github.com/paulirish/Unicorn-js)
 
-##[Documentation/Demo](http://demo.paulvarache.ninja/unicorn-puke/)
+##[Documentation/Demo](http://paulvarache.github.io/unicorn-puke)
 
 Thanks to the all mighty web components, lighten up your websites and webapps with unicorn-puke !  
 A simple

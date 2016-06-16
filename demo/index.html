@@ -23,26 +23,19 @@
 	    font-family: Roboto, sans-serif;
 	    font-weight: 300;
     }
-    .header {
-    	background: url("http://licm.paulvarache.ninja/images/bg.jpg");
-    	background-size: cover;
-    	height: 150px;
-    	filter: blur(2px);
-    	-moz-filter: blur(2px);
-    	-webkit-filter: blur(2px);
-    }
     .layout {
-    	position: absolute;
-    	bottom: 0;
-    	top:150px;
-    	left: 0;
-    	right: 0;
-        text-align: center;
+        height: 100%;
+    	display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    unicorn-puke {
+        display: inline-block;
     }
     </style>
 </head>
 <body>
-	<div class="header"></div>
 	<div class="layout">
 		<h1>
 			<!--This is where the magic happens-->
