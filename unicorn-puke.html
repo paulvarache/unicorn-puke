@@ -1,4 +1,4 @@
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer-element.html">
 <!--
 An element that add some kick-ass colors to your text
 
@@ -21,124 +21,154 @@ Custom property | Description | Default
 @demo 			demo/unicorn-puke.html
 -->
 <dom-module id="unicorn-puke">
-	<style>
-        :host {
-            display: block;
-        }
-		#cont {
-			@apply(--unicorn-puke-text);
-		}
-	</style>
 	<template>
+		<style>
+			:host {
+				display: block;
+			}
+			#cont {
+				@apply --unicorn-puke-text;
+			}
+		</style>
 		<div id="cont"></div>
 	</template>
 	<script>
-	Polymer({
-		is: 'unicorn-puke',
-		properties: {
-			/**
-			 * The message you want to display
-			 */
-			message: {
-				type: String,
-				observer: '_messageChanged'
-			},
-			/**
-			 * `saturation` changes the colors saturation
-			 */
-			saturation: {
-				type: Number,
-				value: 100,
-				observer: '_saturationChanged'
-			},
-			light: {
-				type: Number,
-				value: 50,
-				observer: '_lightChanged'
-			},
-			/**
-			 * `speed` changes the unicorn power speed
-			 */
-			speed: {
-				type: Number,
-				value: 10
-			},
-			/**
-			 * `ltr` (meaning left to right) allows you to choose the direction
-			 * of the unicorn puke
-			 * @type {Object}
-			 */
-			ltr: {
-				type: Number,
-				value: false
-			}
-		},
-		listeners: {
-			'mouseover': 'puke',
-			'mouseout': 'stopPuking'
-		},
-		_spans: [],
-		_hues: [],
-		_messageChanged: function () {
-			this._wrapChars();
-		},
-		_saturationChanged: function (oldVal, newVal) {
-			this.saturation = this._limitToHundred(this.saturation);
-		},
-		_lightChanged: function (oldVal, newVal) {
-			this.light = this._limitToHundred(this.light);
-		},
-		_limitToHundred: function (value) {
-			return Math.abs(value)>100? 100: Math.abs(value);
-		},
-		_wrapChars: function () {
-			var txt = this.message,
-				len = txt.length,
-				step = 360/len,
-				span = null;
 
-			Polymer.dom(this.$.cont).innerHTML = "";
+		class UnicornPuke extends Polymer.Element {
 
-			for(var i = 0; i < len; i++){
-				mC = Math.ceil(i*step);
-				h = mC <= 360 ? mC : 360;
-				span = document.createElement('span');
-				span.textContent = txt.charAt(i);
-				Polymer.dom(this.$.cont).appendChild(span);
-				this._spans.push(span);
-				this._hues.push(h);
+			static get is () { return 'unicorn-puke'; }
+
+			static get config () {
+				return {
+					properties: {
+						/**
+						 * The message you want to display
+						 */
+						message: {
+							type: String,
+							observer: '_messageChanged'
+						},
+						/**
+						 * `saturation` changes the colors saturation
+						 */
+						saturation: {
+							type: Number,
+							value: 100,
+							observer: '_saturationChanged'
+						},
+						light: {
+							type: Number,
+							value: 50,
+							observer: '_lightChanged'
+						},
+						/**
+						 * `speed` changes the unicorn power speed
+						 */
+						speed: {
+							type: Number,
+							value: 10
+						},
+						/**
+						 * `ltr` (meaning left to right) allows you to choose the direction
+						 * of the unicorn puke
+						 * @type {Object}
+						 */
+						ltr: {
+							type: Number,
+							value: false
+						}
+					}
+				};
 			}
-			Polymer.dom.flush();
-		},
-		_shiftHuesArray: function() {
-			if (!this.ltr) {
-				this._hues.push(this._hues.shift());
-			} else {
-				this._hues.unshift(this._hues.pop());
+
+			constructor () {
+				super();
+				this._spans = [];
+				this._hues = [];
 			}
-		},
-		/**
-		 * Makes your text all shinny grblbblblblblb
-		 */
-		puke: function() {
-			this.itv = setInterval(function(){
-				this._shiftHuesArray();
-				this._spans.forEach(function(span, i){
-					span.style.color = "hsla("+ this._hues[i] +","+ this.saturation +"% ,"+ this.light +"%, 1)";
-				}.bind(this));
-			}.bind(this), this.speed);
-		},
-		/**
-		 * Stop the puking
-		 */
-		stopPuking: function(){
-			// stop color cycling
-			clearInterval(this.itv);
-			// return affected chars to default styling
-			this._spans.forEach(function(span) {
-				span.style.color = "";
-			});
+
+            connectedCallback () {
+                super.connectedCallback();
+                this._puke = this.puke.bind(this);
+                this._stopPuking = this.stopPuking.bind(this);
+                this.addEventListener('mouseover', this._puke);
+                this.addEventListener('mouseout', this._stopPuking);
+            }
+
+            disconnectedCallback () {
+                super.disconnectedCallback();
+                this.removeEventListener('mouseover', this._puke);
+                this.removeEventListener('mouseout', this._stopPuking);
+            }
+
+			_messageChanged () {
+				this._wrapChars();
+			}
+
+			_saturationChanged (oldVal, newVal) {
+				this.saturation = this._limitToHundred(this.saturation);
+			}
+
+			_lightChanged (oldVal, newVal) {
+				this.light = this._limitToHundred(this.light);
+			}
+
+			_limitToHundred (value) {
+				return Math.abs(value)>100? 100: Math.abs(value);
+			}
+
+			_wrapChars () {
+				let txt = this.message,
+					len = txt.length,
+					step = 360/len,
+					span = null, mC, h;
+
+				this.$.cont.innerHTML = "";
+
+				for(let i = 0; i < len; i++){
+					mC = Math.ceil(i*step);
+					h = mC <= 360 ? mC : 360;
+					span = document.createElement('span');
+					span.textContent = txt.charAt(i);
+					this.$.cont.appendChild(span);
+					this._spans.push(span);
+					this._hues.push(h);
+				}
+			}
+
+			_shiftHuesArray () {
+				if (!this.ltr) {
+					this._hues.push(this._hues.shift());
+				} else {
+					this._hues.unshift(this._hues.pop());
+				}
+			}
+
+			/**
+			 * Makes your text all shinny grblbblblblblb
+			 */
+			puke () {
+				this.itv = setInterval(() => {
+					this._shiftHuesArray();
+					this._spans.forEach((span, i) => {
+						span.style.color = "hsla("+ this._hues[i] +","+ this.saturation +"% ,"+ this.light +"%, 1)";
+					});
+				}, this.speed);
+			}
+
+			/**
+			 * Stop the puking
+			 */
+			stopPuking (){
+				// stop color cycling
+				clearInterval(this.itv);
+				// return affected chars to default styling
+				this._spans.forEach((span) => {
+					span.style.color = "";
+				});
+			}
 		}
-	});
+
+		customElements.define('unicorn-puke', UnicornPuke);
 	</script>
 </dom-module>
